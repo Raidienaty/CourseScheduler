@@ -1,5 +1,6 @@
 import pandas
 import os
+import re
 
 COURSE_GRID_TEMPLATE = 'Course Grid UPDATED.xlsx'
 
@@ -38,4 +39,26 @@ courseReport = pandas.read_excel(selectedDoc)
 print(courseReport.head(10))
 print()
 print(courseTemplate.head(10))
+
+courses = {'AV': [], 'CM': [], 'CS': [], 'EG': [], 'IT': []}
+
+for course in courseReport['Course Name']:
+    if re.findall(r'\b(AV|AT|AM)', str(course), re.I):
+        courses['AV'].append(str(course))
+    elif re.findall(r'\b(CM|CSM)', course, re.I):
+        courses['CM'].append(str(course))
+    elif re.findall(r'\b(CS)', course, re.I):
+        courses['CS'].append(str(course))
+    elif re.findall(r'\b(EG|EE)', course, re.I):
+        courses['EG'].append(str(course))
+    elif re.findall(r'IT', course, re.I):
+        courses['IT'].append(str(course))
+
+print(courses['AV'])
+
+
+# for column in range(courseTemplate.columns):
+#     if column == 'TIME':
+#         continue
+#     for row in range(courseTemplate.TIME):
 
