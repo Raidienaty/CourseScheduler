@@ -10,8 +10,11 @@ print('Which file would you like to use?')
 excelDocs = []
 
 for item in directoryList:
-    if item.find('.xlsx') != -1:
+    if item.find('Course Grid UPDATED.xlsx') != -1:
+        continue
+    elif item.find('.xlsx') != -1:
         excelDocs.append(item)
+
 
 if len(excelDocs) < 1:
     print('Please move the course report to my folder!')
