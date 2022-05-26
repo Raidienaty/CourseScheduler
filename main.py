@@ -87,15 +87,17 @@ for major in courses:
         }
 
         for day in schedule:
+            courseSchedules[major][day] = courseSchedules[major][day].apply(str)
+
             if schedule[day] == 'Y':
-                position = COURSE_GRID_POSITIONS[0][str(int(period))]
+                position = COURSE_GRID_POSITIONS[list(schedule).index(day)][str(int(period))]
 
-                courseSchedules[major][day][position] = "hi"
-                
+                courseSchedules[major][day][position] += '\n' + str(course[1]['Section Name']) + '-' +  str(course[1]['Instructor Last Name'])
+
+    courseSchedules[major].to_excel('Schedules/' + major + '_course_schedule.xlsx')
 
 
-
-        # courseSchedules[major].loc[]
+    # courseSchedules[major].loc[]
 
 
 
