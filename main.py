@@ -40,21 +40,26 @@ print(courseReport.head(10))
 print()
 print(courseTemplate.head(10))
 
-courses = {'AV': [], 'CM': [], 'CS': [], 'EG': [], 'IT': []}
+courses = {'AV': pandas.DataFrame(columns=courseReport.columns), 
+            'CM': pandas.DataFrame(columns=courseReport.columns), 
+            'CS': pandas.DataFrame(columns=courseReport.columns), 
+            'EG': pandas.DataFrame(columns=courseReport.columns), 
+            'IT': pandas.DataFrame(columns=courseReport.columns)}
 
-for course in courseReport['Course Name']:
-    if re.findall(r'\b(AV|AT|AM)', str(course), re.I):
-        courses['AV'].append(str(course))
-    elif re.findall(r'\b(CM|CSM)', course, re.I):
-        courses['CM'].append(str(course))
-    elif re.findall(r'\b(CS)', course, re.I):
-        courses['CS'].append(str(course))
-    elif re.findall(r'\b(EG|EE)', course, re.I):
-        courses['EG'].append(str(course))
-    elif re.findall(r'IT', course, re.I):
-        courses['IT'].append(str(course))
+for key, course in courseReport.iterrows():
+    # print(courseReport.iloc[key])
+    if re.findall(r'\b(AV|AT|AM)', str(courseReport.loc[key]['Course Name']), re.I):
+        courses['AV'] = courses['AV'].append(courseReport.iloc[[key]])
+    elif re.findall(r'\b(CM|CSM)', str(course), re.I):
+        courses['CM'] = courses['CM'].append(courseReport.iloc[[key]])
+    elif re.findall(r'\b(CS)', str(course), re.I):
+        courses['CS'] = courses['CS'].append(courseReport.iloc[[key]])
+    elif re.findall(r'\b(EG|EE)', str(course), re.I):
+        courses['EG'] = courses['EG'].append(courseReport.iloc[[key]])
+    elif re.findall(r'IT', str(course), re.I):
+        courses['IT'] = courses['IT'].append(courseReport.iloc[[key]])
 
-print(courses['AV'])
+
 
 
 # for column in range(courseTemplate.columns):
