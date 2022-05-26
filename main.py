@@ -3,6 +3,13 @@ import os
 import re
 
 COURSE_GRID_TEMPLATE = 'Course Grid UPDATED.xlsx'
+COURSE_GRID_POSITIONS = [
+    {'1': 0, '3': 1, '5': 2, '7': 3, '9': 4, '11': 5, '20': 6, '22': 7},
+    {'2': 0, '4': 1, '13': 2, '14': 3, '10': 4, '21': 6, '23': 7},
+    {'1': 0, '3': 1, '6': 2, '8': 3, '12': 5, '20': 6, '22': 7},
+    {'13': 0, '14': 1, '5': 2, '7': 3, '9': 4, '11': 5, '21': 6, '23': 7},
+    {'2': 0, '4': 1, '6': 2, '8': 3, '10': 4, '12': 5}
+]
 
 #path =  os.path.realpath(__file__)
 directoryList = os.listdir('.')
@@ -59,6 +66,36 @@ for key, course in courseReport.iterrows():
     elif re.findall(r'IT', str(course), re.I):
         courses['IT'] = courses['IT'].append(courseReport.iloc[[key]])
 
+courseSchedules = {
+    'AV': pandas.DataFrame(courseTemplate, columns=courseTemplate.columns),
+    'CM': pandas.DataFrame(courseTemplate, columns=courseTemplate.columns),
+    'CS': pandas.DataFrame(courseTemplate, columns=courseTemplate.columns),
+    'EG': pandas.DataFrame(courseTemplate, columns=courseTemplate.columns),
+    'IT': pandas.DataFrame(courseTemplate, columns=courseTemplate.columns)
+}
+
+for major in courses:
+    for course in courses[major].iterrows():
+        period = course[1]['Period']
+
+        schedule = {
+            'MONDAY': course[1]['M'], 
+            'TUESDAY': course[1]['T'], 
+            'WEDNESDAY': course[1]['W'], 
+            'THURSDAY': course[1]['TH'], 
+            'FRIDAY': course[1]['F']
+        }
+
+        for day in schedule:
+            if schedule[day] == 'Y':
+                position = COURSE_GRID_POSITIONS[0][str(int(period))]
+
+                courseSchedules[major][day][position] = "hi"
+                
+
+
+
+        # courseSchedules[major].loc[]
 
 
 
