@@ -18,61 +18,64 @@ def get_col_widths(dataframe):
     # Then, we concatenate this to the max of the lengths of column name and its values for each column, left to right
     return [idx_max] + [max([len(str(s)) for s in dataframe[col].values] + [len(col)]) for col in dataframe.columns]
 
+def findDocument():
+    #path =  os.path.realpath(__file__)
+    directoryList = os.listdir('.')
 
-#path =  os.path.realpath(__file__)
-directoryList = os.listdir('.')
+    print('Which file would you like to use?')
 
-print('Which file would you like to use?')
+    excelDocs = []
 
-excelDocs = []
+    for item in directoryList:
+        if item.find(COURSE_GRID_TEMPLATE) != -1:
+            continue
+        elif item.find('.xlsx') != -1:
+            excelDocs.append(item)
 
-for item in directoryList:
-    if item.find(COURSE_GRID_TEMPLATE) != -1:
-        continue
-    elif item.find('.xlsx') != -1:
-        excelDocs.append(item)
+    selectedDoc = ''
 
-selectedDoc = ''
+    if len(excelDocs) < 1:
+        print('Please move the course report to my folder!')
+        exit()
+    elif len(excelDocs) > 1:
+        print('Which of the following files would you like to use?')
+        for item in excelDocs:
+            print(item)
+    else:
+        print('Using: ')
+        for item in excelDocs: 
+            print(item)
 
-if len(excelDocs) < 1:
-    print('Please move the course report to my folder!')
-    exit()
-elif len(excelDocs) > 1:
-    print('Which of the following files would you like to use?')
-    for item in excelDocs:
-        print(item)
-else:
-    print('Using: ')
-    for item in excelDocs: 
-        print(item)
+        return excelDocs[0]
 
-    selectedDoc = excelDocs[0]
+def filterForClasses(courseReport, courses):
+    for key, course in courseReport.iterrows():
+        # print(courseReport.iloc[key])
+        if re.findall(r'\b(AV|AT|AM)', str(courseReport.loc[key]['Course Name']), re.I):
+            courses['AV'] = courses['AV'].append(courseReport.iloc[[key]])
+        elif re.findall(r'\b(CM|CSM)', str(course), re.I):
+            courses['CM'] = courses['CM'].append(courseReport.iloc[[key]])
+        elif re.findall(r'\b(CS)', str(course), re.I):
+            courses['CS'] = courses['CS'].append(courseReport.iloc[[key]])
+        elif re.findall(r'\b(EG|EE)', str(course), re.I):
+            courses['EG'] = courses['EG'].append(courseReport.iloc[[key]])
+        elif re.findall(r'IT', str(course), re.I):
+            courses['IT'] = courses['IT'].append(courseReport.iloc[[key]])
+
+    return courses
+
+selectedDoc = findDocument()
 
 courseTemplate = pandas.read_excel(COURSE_GRID_TEMPLATE)
 courseReport = pandas.read_excel(selectedDoc)
 
-print(courseReport.head(10))
-print()
-print(courseTemplate.head(10))
-
-courses = {'AV': pandas.DataFrame(columns=courseReport.columns), 
-            'CM': pandas.DataFrame(columns=courseReport.columns), 
-            'CS': pandas.DataFrame(columns=courseReport.columns), 
-            'EG': pandas.DataFrame(columns=courseReport.columns), 
-            'IT': pandas.DataFrame(columns=courseReport.columns)}
-
-for key, course in courseReport.iterrows():
-    # print(courseReport.iloc[key])
-    if re.findall(r'\b(AV|AT|AM)', str(courseReport.loc[key]['Course Name']), re.I):
-        courses['AV'] = courses['AV'].append(courseReport.iloc[[key]])
-    elif re.findall(r'\b(CM|CSM)', str(course), re.I):
-        courses['CM'] = courses['CM'].append(courseReport.iloc[[key]])
-    elif re.findall(r'\b(CS)', str(course), re.I):
-        courses['CS'] = courses['CS'].append(courseReport.iloc[[key]])
-    elif re.findall(r'\b(EG|EE)', str(course), re.I):
-        courses['EG'] = courses['EG'].append(courseReport.iloc[[key]])
-    elif re.findall(r'IT', str(course), re.I):
-        courses['IT'] = courses['IT'].append(courseReport.iloc[[key]])
+courses = {
+    'AV': pandas.DataFrame(columns=courseReport.columns), 
+    'CM': pandas.DataFrame(columns=courseReport.columns), 
+    'CS': pandas.DataFrame(columns=courseReport.columns), 
+    'EG': pandas.DataFrame(columns=courseReport.columns), 
+    'IT': pandas.DataFrame(columns=courseReport.columns)
+}
 
 courseSchedules = {
     'AV': pandas.DataFrame(courseTemplate.values, columns=courseTemplate.columns),
@@ -81,6 +84,8 @@ courseSchedules = {
     'EG': pandas.DataFrame(courseTemplate.values, columns=courseTemplate.columns),
     'IT': pandas.DataFrame(courseTemplate.values, columns=courseTemplate.columns)
 }
+
+courses = filterForClasses(courseReport, courses)
 
 for major in courses:
     for course in courses[major].iterrows():
@@ -102,25 +107,4 @@ for major in courses:
 
                 courseSchedules[major][day][position] += '\n' + str(course[1]['Section Name']) + '-' +  str(course[1]['Instructor Last Name']) + '-' + str(course[1]['Meeting Building']) + '-' + str(course[1]['Meeting Room'])
 
-    # writer = pandas.ExcelWriter('Schedules/' + major + '_course_schedule.xlsx', engine='xlsxwriter')
-    # courseSchedules[major].to_excel(writer, sheet_name=major, index=False)
-
-    # workbook = writer.book
-    # worksheet = writer.sheets[major]
-
-    # writer.save()
-
     courseSchedules[major].to_excel('Schedules/' + major + '_course_schedule.xlsx', sheet_name=major, index=False)
-
-    # format = workbook.add_format({'text_wrap': True, 'align': 'top left'})
-    # worksheet.set_column(0, len(courseSchedules[major].columns) - 1, cell_format=format)
-
-    # courseSchedules[major].loc[]
-
-
-
-# for column in range(courseTemplate.columns):
-#     if column == 'TIME':
-#         continue
-#     for row in range(courseTemplate.TIME):
-
