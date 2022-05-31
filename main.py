@@ -75,11 +75,11 @@ for key, course in courseReport.iterrows():
         courses['IT'] = courses['IT'].append(courseReport.iloc[[key]])
 
 courseSchedules = {
-    'AV': pandas.DataFrame(courseTemplate, columns=courseTemplate.columns),
-    'CM': pandas.DataFrame(courseTemplate, columns=courseTemplate.columns),
-    'CS': pandas.DataFrame(courseTemplate, columns=courseTemplate.columns),
-    'EG': pandas.DataFrame(courseTemplate, columns=courseTemplate.columns),
-    'IT': pandas.DataFrame(courseTemplate, columns=courseTemplate.columns)
+    'AV': pandas.DataFrame(courseTemplate.values, columns=courseTemplate.columns),
+    'CM': pandas.DataFrame(courseTemplate.values, columns=courseTemplate.columns),
+    'CS': pandas.DataFrame(courseTemplate.values, columns=courseTemplate.columns),
+    'EG': pandas.DataFrame(courseTemplate.values, columns=courseTemplate.columns),
+    'IT': pandas.DataFrame(courseTemplate.values, columns=courseTemplate.columns)
 }
 
 for major in courses:
