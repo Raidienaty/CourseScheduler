@@ -67,9 +67,6 @@ def filterForClasses(courseReport, courses):
 def checkTimeValid(start, end):
     validTimes = [['8:00AM', '9:15AM'], ['9:30AM', '10:45AM'], ['11:00AM', '12:15PM'], ['12:30PM', '1:45PM'], ['2:00PM', '3:15PM'], ['3:30PM', '4:45PM'], ['5:00PM', '6:15PM'], ['6:30PM', '7:45PM'], ['8:00PM', '9:15PM']]
 
-    if (type(start) != str or type(end) != str):
-        return False
-
     for times in validTimes:
         if (start.find(times[0]) != -1 and end.find(times[1]) != -1):
             return True
@@ -82,8 +79,15 @@ def filterTimes(courseReport, courses):
 
     for major in courses:
         for course in courses[major].iterrows():
-            if not checkTimeValid(course[1]['Start Time'], course[1]['End Time']):
+            start = course[1]['Start Time']
+            end = course[1]['End Time']
+            
+            if (type(start) != str or type(end) != str):
+                continue
+
+            if not checkTimeValid(start, end):
                 period = course[1]['Period']
+                print(course[1]['Section Name'])
                 # TODO: Get next period from current period
                 # block out next period with course
 
