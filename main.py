@@ -1,4 +1,3 @@
-from operator import truediv
 import pandas
 import os
 import re
@@ -49,7 +48,6 @@ def findDocument():
 
         return excelDocs[0]
 
-# TODO: Look at class times for double blocks as well
 def filterForClasses(courseReport, courses):
     for key, course in courseReport.iterrows():
         # print(courseReport.iloc[key])
@@ -85,7 +83,9 @@ def filterTimes(courseReport, courses):
     for major in courses:
         for course in courses[major].iterrows():
             if not checkTimeValid(course[1]['Start Time'], course[1]['End Time']):
-                print(course[1]['Section Name'])
+                period = course[1]['Period']
+                # TODO: Get next period from current period
+                # block out next period with course
 
 def main():
     selectedDoc = findDocument()
