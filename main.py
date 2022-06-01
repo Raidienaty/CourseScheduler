@@ -73,23 +73,13 @@ def checkTimeValid(start, end):
 
     return False
 
-def filterTimes(courseReport, courses):
-    #Start Time
-    #End Time
+# def filterTimes(courseReport, courses):
+#     #Start Time
+#     #End Time
 
-    for major in courses:
-        for course in courses[major].iterrows():
-            start = course[1]['Start Time']
-            end = course[1]['End Time']
-            
-            if (type(start) != str or type(end) != str):
-                continue
+#     for major in courses:
+#         for course in courses[major].iterrows():
 
-            if not checkTimeValid(start, end):
-                period = course[1]['Period']
-                print(course[1]['Section Name'])
-                # TODO: Get next period from current period
-                # block out next period with course
 
 def main():
     selectedDoc = findDocument()
@@ -128,6 +118,19 @@ def main():
             }
 
             for day in schedule:
+                start = course[1]['Start Time']
+                end = course[1]['End Time']
+                
+                if (type(start) != str or type(end) != str):
+                    continue
+
+                if not checkTimeValid(start, end):
+                    dictList = list(COURSE_GRID_POSITIONS[list(schedule).index(day)])
+                    periodIndex = dictList.index(str(int(period)))
+
+                    print(course[1]['Section Name'])
+                    print(dictList[int(periodIndex) + 1])
+
                 courseSchedules[major][day] = courseSchedules[major][day].apply(str)
 
                 if schedule[day] == 'Y':
@@ -137,6 +140,6 @@ def main():
 
         courseSchedules[major].to_excel('Schedules/' + major + '_course_schedule.xlsx', sheet_name=major, index=False)
 
-    filterTimes(courseReport, courses)
+    # filterTimes(courseReport, courses)
 
 main()
