@@ -12,3 +12,17 @@ If you're on Windows, you're in luck! We have an exe file just for you. If not, 
 4. Once you have the report in the folder, double click the `main.exe` file. This will run it.
 5. To see the output, please check the `Schedules` folder. This is where all the schedules that are built end up.
 6. Once done, please make sure to delete your previous report! If you don't, the program will crash!
+
+## CLI Users
+
+1. Please confirm you have `git` installed on your machine through your respective package manager (apt, dnf, yum, brew, ~~snap~~)
+2. Please run the following to clone the repo to your machine:
+```
+git clone https://github.com/Raidienaty/CourseScheduler.git
+```
+3. Once downloaded, move your report file into the folder.
+4. Run the program using
+```sh
+python3 main.py
+```
+5. Be sure to delete your report before running it with a new report. You can only have the one report in the folder at a time.
