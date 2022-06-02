@@ -1,7 +1,6 @@
 import pandas
 import os
 import re
-import xlsxwriter
 
 COURSE_GRID_TEMPLATE = 'Course Grid UPDATED.xlsx'
 COURSE_GRID_POSITIONS = [
@@ -73,14 +72,6 @@ def checkTimeValid(start, end):
 
     return False
 
-# def filterTimes(courseReport, courses):
-#     #Start Time
-#     #End Time
-
-#     for major in courses:
-#         for course in courses[major].iterrows():
-
-
 def main():
     selectedDoc = findDocument()
 
@@ -106,6 +97,12 @@ def main():
     courses = filterForClasses(courseReport, courses)
 
     for major in courses:
+        for index, cell in courseSchedules[major]['FRIDAY'].items():
+            if str(cell) == 'nan':
+                courseSchedules[major]['FRIDAY'][index] = ''
+            elif str(cell).find('.0'):
+                courseSchedules[major]['FRIDAY'][index] = str(int(cell))
+
         for course in courses[major].iterrows():
             period = course[1]['Period']
 
@@ -153,9 +150,6 @@ def main():
 
                     courseSchedules[major][day][position] += '\n' + sectionName + '-' + instructorLastName + '-' + meetingBuilding + '-' + meetingRoom
 
-        courseSchedules[major].dropna()
         courseSchedules[major].to_excel('Schedules/' + major + '_course_schedule.xlsx', sheet_name=major, index=False)
-
-    # filterTimes(courseReport, courses)
 
 main()
