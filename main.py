@@ -137,9 +137,9 @@ def main():
                     if tempCourse != []:
                         position = COURSE_GRID_POSITIONS[list(schedule).index(day)][str(int(tempCourse[3]))]
                         courseSchedules[major][day][position] += '\n' + str(tempCourse[2]) + '-' +  str(tempCourse[0]) + '-' + str(tempCourse[6]) + '-' + str(tempCourse[7])
-                    else:
-                        position = COURSE_GRID_POSITIONS[list(schedule).index(day)][str(int(period))]
-                        courseSchedules[major][day][position] += '\n' + str(course[1]['Section Name']) + '-' +  str(course[1]['Instructor Last Name']) + '-' + str(course[1]['Meeting Building']) + '-' + str(course[1]['Meeting Room'])
+                    
+                    position = COURSE_GRID_POSITIONS[list(schedule).index(day)][str(int(period))]
+                    courseSchedules[major][day][position] += '\n' + str(course[1]['Section Name']) + '-' +  str(course[1]['Instructor Last Name']) + '-' + str(course[1]['Meeting Building']) + '-' + str(course[1]['Meeting Room'])
 
         courseSchedules[major].to_excel('Schedules/' + major + '_course_schedule.xlsx', sheet_name=major, index=False)
 
