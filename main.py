@@ -53,13 +53,13 @@ def filterForClasses(courseReport, courses):
         # print(courseReport.iloc[key])
         if re.findall(r'\b(AV|AT|AM)', str(courseReport.loc[key]['Course Name']), re.I):
             courses['AV'] = courses['AV'].append(courseReport.iloc[[key]])
-        elif re.findall(r'\b(CM|CSM)', str(course), re.I):
+        elif re.findall(r'\b(CM|CSM)', str(courseReport.loc[key]['Course Name']), re.I):
             courses['CM'] = courses['CM'].append(courseReport.iloc[[key]])
-        elif re.findall(r'\b(CS)', str(course), re.I):
+        elif re.findall(r'\b(CS)', str(courseReport.loc[key]['Course Name']), re.I):
             courses['CS'] = courses['CS'].append(courseReport.iloc[[key]])
-        elif re.findall(r'\b(EG|EE)', str(course), re.I):
+        elif re.findall(r'\b(EG|EE)', str(courseReport.loc[key]['Course Name']), re.I):
             courses['EG'] = courses['EG'].append(courseReport.iloc[[key]])
-        elif re.findall(r'IT', str(course), re.I):
+        elif re.findall(r'\b(IT)', str(courseReport.loc[key]['Course Name']), re.I):
             courses['IT'] = courses['IT'].append(courseReport.iloc[[key]])
 
     return courses
@@ -145,8 +145,15 @@ def main():
                         courseSchedules[major][day][position] += '\n' + sectionName + '-' + instructorLastName + '-' + meetingBuilding + '-' + meetingRoom
                     
                     position = COURSE_GRID_POSITIONS[list(schedule).index(day)][str(int(period))]
-                    courseSchedules[major][day][position] += '\n' + str(course[1]['Section Name']) + '-' +  str(course[1]['Instructor Last Name']) + '-' + str(course[1]['Meeting Building']) + '-' + str(course[1]['Meeting Room'])
 
+                    sectionName = str(course[1]['Section Name']) if str(course[1]['Section Name']) != 'nan' else 'TBD'
+                    instructorLastName = str(course[1]['Instructor Last Name']) if str(course[1]['Instructor Last Name']) != 'nan' else 'TBD'
+                    meetingBuilding = str(course[1]['Meeting Building']) if str(course[1]['Meeting Building']) != 'nan' else 'TBD'
+                    meetingRoom = str(course[1]['Meeting Room']) if str(course[1]['Meeting Room']) != 'nan' else 'TBD'
+
+                    courseSchedules[major][day][position] += '\n' + sectionName + '-' + instructorLastName + '-' + meetingBuilding + '-' + meetingRoom
+
+        courseSchedules[major].dropna()
         courseSchedules[major].to_excel('Schedules/' + major + '_course_schedule.xlsx', sheet_name=major, index=False)
 
     # filterTimes(courseReport, courses)
