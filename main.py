@@ -136,7 +136,13 @@ def main():
 
                     if tempCourse != []:
                         position = COURSE_GRID_POSITIONS[list(schedule).index(day)][str(int(tempCourse[3]))]
-                        courseSchedules[major][day][position] += '\n' + str(tempCourse[2]) + '-' +  str(tempCourse[0]) + '-' + str(tempCourse[6]) + '-' + str(tempCourse[7])
+
+                        sectionName = str(tempCourse[2]) if str(tempCourse[2]) != 'nan' else 'TBD'
+                        instructorLastName = str(tempCourse[0]) if str(tempCourse[0]) != 'nan' else 'TBD'
+                        meetingBuilding = str(tempCourse[6]) if str(tempCourse[6]) != 'nan' else 'TBD'
+                        meetingRoom = str(tempCourse[7]) if str(tempCourse[7]) != 'nan' else 'TBD'
+
+                        courseSchedules[major][day][position] += '\n' + sectionName + '-' + instructorLastName + '-' + meetingBuilding + '-' + meetingRoom
                     
                     position = COURSE_GRID_POSITIONS[list(schedule).index(day)][str(int(period))]
                     courseSchedules[major][day][position] += '\n' + str(course[1]['Section Name']) + '-' +  str(course[1]['Instructor Last Name']) + '-' + str(course[1]['Meeting Building']) + '-' + str(course[1]['Meeting Room'])
